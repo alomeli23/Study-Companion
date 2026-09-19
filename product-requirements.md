@@ -26,6 +26,14 @@ Users can:
 - Tap their companion to receive a stage-appropriate message
 - View their previous study sessions
 
+## Progression
+- 1 minute of study = 1 XP
+- XP is awarded when a study session is stopped
+- The earned XP is based on the session's duration
+- The egg hatches at 60 XP
+- The companion has 3 growth stages
+- Each growth stage has an XP threshold
+
 ## Not in Scope
 - User accounts
 - Cross-device progress syncing
@@ -36,3 +44,4 @@ Users can:
 - Achievements
 - Mobile app
 - AI conversations
+
