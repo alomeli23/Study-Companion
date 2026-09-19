@@ -33,6 +33,7 @@ Users can:
 - The egg hatches at 60 XP
 - The companion has 3 growth stages
 - Each growth stage has an XP threshold
+- XP Thresholds: 60/300/1500 for Newborn, Growing, and Mature respectively
 
 ## Not in Scope
 - User accounts
