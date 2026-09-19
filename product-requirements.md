@@ -16,8 +16,7 @@ Study
 
 ## MVP
 Users can:
-- Create an account
-- Log in
+- Have progress that persists between visits on the same browser
 - Start a study session
 - Stop a study session
 - earn XP based on study duration
