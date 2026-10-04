@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -21,8 +22,13 @@ public class HelloController {
     }
 
     @PostMapping("/api/sessions")
-    public void createSession(@RequestBody StudySession session) {
-        studySessionRepository.save(session);
+    public StudySession createSession(@RequestBody StudySession session) {
         System.out.println("Received session: " + session.getDurationSeconds());
+        return studySessionRepository.save(session);
+    }
+
+    @GetMapping("/api/sessions")
+    public List<StudySession> getSessions() {
+        return studySessionRepository.findAll();
     }
 }

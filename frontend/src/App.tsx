@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+type StudySession = {
+    id: number
+    durationSeconds: number
+}
 function App() {
     const [seconds, setSeconds] = useState(0)
     const [isRunning, setIsRunning] = useState(false)
-    const [lastSession, setLastSession] = useState(false)
+    const [lastSession, setLastSession] = useState(0)
+    const [sessions, setSessions] = useState<StudySession[]>([])
+
+
+
 
     useEffect(() => {
         if (isRunning) {
@@ -15,6 +23,13 @@ function App() {
             return () => clearInterval(interval)
         }
     }, [isRunning]) //dependency array (run whenever isRunning changes)
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/sessions')
+            .then(response => response.json())
+            .then(data => setSessions(data))
+
+    }, [])
 
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
@@ -38,6 +53,10 @@ function App() {
                     },
                     body: JSON.stringify(session)
                 })
+                    .then(response => response.json())
+                    .then(savedSession => {
+                        setSessions((sessions) => [...sessions, savedSession])
+                    })
 
                 setLastSession(seconds)
                 setSeconds(0)
@@ -57,6 +76,13 @@ function App() {
             <button onClick={handleTimer}></button>
 
             <p>Last Session: {lastSession} seconds</p>
+
+            <h2>Recent Sessions</h2>
+            {sessions.map((session) => (
+                <p key={session.id}>
+                    {session.durationSeconds} seconds
+                </p>
+            ))}
         </>
     )
 }
