@@ -33,6 +33,10 @@ function App() {
 
     const minutes = Math.floor(seconds / 60)
     const remainingSeconds = seconds % 60
+    const totalStudyTime = sessions.reduce((total, session) => {
+        return total + session.durationSeconds
+    }, 0)
+    const totalMinutes = Math.floor(totalStudyTime/60)
 
 
     const handleTimer = () => {
@@ -76,7 +80,7 @@ function App() {
             <button onClick={handleTimer}></button>
 
             <p>Last Session: {lastSession} seconds</p>
-
+            <p>Total Study Time: {totalMinutes} minutes</p>
             <h2>Recent Sessions</h2>
             {sessions.map((session) => (
                 <p key={session.id}>
