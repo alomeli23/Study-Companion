@@ -11,7 +11,7 @@ function App() {
     const [lastSession, setLastSession] = useState(0)
     const [sessions, setSessions] = useState<StudySession[]>([])
     const [companionMessage, setCompanionMessage] = useState('')
-
+    const [isPopping, setIsPopping] = useState(false)
 
 
     useEffect(() => {
@@ -37,7 +37,21 @@ function App() {
         return total + session.durationSeconds
     }, 0)
     const totalMinutes = Math.floor(totalStudyTime/60)
-    const totalXP = Math.floor(totalStudyTime/60)
+    const totalXP = 3000
+
+    const companionImages: Record<string, string> = {
+        Egg: '/companions/egg.png',
+        Baby: '/companions/baby.png',
+        Medium: '/companions/medium.png',
+        Adult: '/companions/adult.png'
+    }
+
+    const companionPopImages: Record<string, string> = {
+        Egg: '/companions/eggpop.png',
+        Baby: '/companions/babypop.png',
+        Medium: '/companions/medpop.png',
+        Adult: '/companions/adultpop.png'
+    }
 
     const eggMessages = [
         "Crack! It can feel your focus!",
@@ -72,6 +86,7 @@ function App() {
 
     const handleCompanionClick = () => {
         let messages = eggMessages
+        setIsPopping(true)
         switch (growthStage) {
             case 'Baby':
                 messages = babyMessages
@@ -124,8 +139,18 @@ function App() {
         <>
             <h1>Study-Companion</h1>
             <p>Growth Stage: {growthStage}</p>
-            <button onClick={handleCompanionClick}>
-                Companion
+            <button
+                onClick={handleCompanionClick}
+                onAnimationEnd={() => setIsPopping(false)}
+                className={`companion-button ${isPopping ? 'companion-pop' : ''}`}
+                aria-label="Talk to companion"
+            >
+                <img
+                    src={isPopping
+                        ? companionPopImages[growthStage]
+                        : companionImages[growthStage]}
+                    alt={`${growthStage} companion`}
+                />
             </button>
             <p>{companionMessage}</p>
             <p>{String(minutes).padStart(2,'0')}:
