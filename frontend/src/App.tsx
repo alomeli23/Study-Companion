@@ -16,13 +16,33 @@ function App() {
 
     useEffect(() => {
         if (isRunning) {
-            const interval = setInterval(() =>{
-                setSeconds((seconds) => seconds+1)
-            }, 1000)
+            const interval  = setInterval(() => {
 
-            return () => clearInterval(interval)
+                if(localStorage.getItem("studyStartTime") != null) {
+                    const time = Number(localStorage.getItem("studyStartTime"))
+                    const elapsedTime = Math.floor((Date.now() - time) / 1000);
+                    setSeconds(elapsedTime)
+
+                }
+
+                },1000)
+
+
+                return () => clearInterval(interval)
         }
     }, [isRunning]) //dependency array (run whenever isRunning changes)
+
+
+    useEffect(() => {
+        if(localStorage.getItem("studyStartTime") != null){
+            const time = Number(localStorage.getItem("studyStartTime"))
+            const elapsedTime = Math.floor((Date.now() - time)/1000);
+            setSeconds(elapsedTime)
+            setIsRunning(true)
+        }
+
+    }, [])
+
 
     useEffect(() => {
         fetch('http://localhost:8080/api/sessions')
@@ -37,7 +57,7 @@ function App() {
         return total + session.durationSeconds
     }, 0)
     const totalMinutes = Math.floor(totalStudyTime/60)
-    const totalXP = 3000
+    const totalXP = Math.floor(totalStudyTime/60)
 
     const companionImages: Record<string, string> = {
         Egg: '/companions/egg.png',
@@ -106,6 +126,8 @@ function App() {
     const handleTimer = () => {
         if(isRunning) {
             setIsRunning(false)
+            localStorage.removeItem("studyStartTime")
+
             if(seconds < 5){
                 setSeconds(0)
             }
@@ -132,6 +154,9 @@ function App() {
         }
         else{
             setIsRunning(true)
+            const startTime = Date.now()
+            localStorage.setItem("studyStartTime", String(startTime))
+
         }
     }
 
