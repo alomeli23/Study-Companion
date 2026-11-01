@@ -57,7 +57,10 @@ function App() {
         return total + session.durationSeconds
     }, 0)
     const totalMinutes = Math.floor(totalStudyTime/60)
-    const totalXP = Math.floor(totalStudyTime/60)
+    const actualXP = Math.floor(totalStudyTime/60)
+    const totalXP = actualXP
+
+
 
     const companionImages: Record<string, string> = {
         Egg: '/companions/egg.png',
@@ -103,6 +106,32 @@ function App() {
     } else if (totalXP >= 60) {
         growthStage = 'Baby'
     }
+
+    let nextEvolutionXp: number | null = 60
+    let currentStageXP: number = 0
+
+    if (growthStage === 'Baby'){
+        currentStageXP = 60
+        nextEvolutionXp = 300
+    }
+    else if (growthStage === 'Medium'){
+        currentStageXP = 300
+        nextEvolutionXp = 1500
+    }
+    else if (growthStage === 'Adult') {
+        currentStageXP = 1500
+        nextEvolutionXp = null
+    }
+
+    let progress: number = 0
+
+    if (nextEvolutionXp != null) {
+        progress = ((totalXP-currentStageXP)/(nextEvolutionXp-currentStageXP))*100
+    }
+    else{
+        progress = 100
+    }
+
 
     const handleCompanionClick = () => {
         let messages = eggMessages
@@ -164,6 +193,15 @@ function App() {
         <>
             <h1>Study-Companion</h1>
             <p>Growth Stage: {growthStage}</p>
+            <div className="progress-bar">
+                <div
+                    className="progress-fill"
+                    style={{ width: `${progress}%` }}
+                />
+                <span className="progress-text">
+                     {growthStage === 'Adult' ? 'MAX' : `${Math.round(progress)}%`}
+                </span>
+            </div>
             <button
                 onClick={handleCompanionClick}
                 onAnimationEnd={() => setIsPopping(false)}
