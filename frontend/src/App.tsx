@@ -21,7 +21,16 @@ function App() {
                 if(localStorage.getItem("studyStartTime") != null) {
                     const time = Number(localStorage.getItem("studyStartTime"))
                     const elapsedTime = Math.floor((Date.now() - time) / 1000);
-                    setSeconds(elapsedTime)
+                    if(elapsedTime > MAX_SESSION_SECONDS){
+                        setIsRunning(false)
+                        setSeconds(0)
+                        localStorage.removeItem("studyStartTime")
+
+                    }
+                    else{
+                        setSeconds(elapsedTime)
+
+                    }
 
                 }
 
@@ -37,8 +46,15 @@ function App() {
         if(localStorage.getItem("studyStartTime") != null){
             const time = Number(localStorage.getItem("studyStartTime"))
             const elapsedTime = Math.floor((Date.now() - time)/1000);
-            setSeconds(elapsedTime)
-            setIsRunning(true)
+
+            if(elapsedTime > MAX_SESSION_SECONDS){
+                localStorage.removeItem("studyStartTime")
+            } else {
+                setSeconds(elapsedTime)
+                setIsRunning(true)
+            }
+
+
         }
 
     }, [])
@@ -59,6 +75,7 @@ function App() {
     const totalMinutes = Math.floor(totalStudyTime/60)
     const actualXP = Math.floor(totalStudyTime/60)
     const totalXP = actualXP
+    const MAX_SESSION_SECONDS = 4 * 60 * 60
 
 
 
@@ -157,7 +174,7 @@ function App() {
             setIsRunning(false)
             localStorage.removeItem("studyStartTime")
 
-            if(seconds < 5){
+            if(seconds < 5 || seconds > MAX_SESSION_SECONDS){
                 setSeconds(0)
             }
             else {
